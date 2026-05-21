@@ -1432,7 +1432,9 @@
     "english": "Kindness is not for others alone",
     "meaning": "Kindness comes back to you",
     "completed": false,
-    "issued": true
+    "issued": false,
+    "completedBy": "PranavV205",
+    "completedPR": 17657
   },
   {
     "id": 160,
