@@ -822,8 +822,10 @@
       "Hiroshima"
     ],
     "correctIndex": 0,
-    "issued": true,
-    "completed": false
+    "issued": false,
+    "completed": false,
+    "completedBy": "abhijeetgorhe26",
+    "completedPR": 18297
   },
   {
     "id": 60,
