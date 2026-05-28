@@ -13,6 +13,7 @@ import SessionSummaryScreen from '@/shared/ui-composite/Game/SessionSummaryScree
 import StreakMilestoneOverlay from '@/shared/ui-composite/Game/StreakMilestoneOverlay';
 import { useRouter } from '@/core/i18n/routing';
 import { finalizeSession, startSession } from '@/shared/utils/sessionHistory';
+import { clearKanaSelectorState } from '@/shared/utils/selectorSessionStorage';
 import useClassicSessionStore from '@/shared/store/useClassicSessionStore';
 import {
   shouldShowStreakMilestoneOverlay,
@@ -65,6 +66,7 @@ const Game = () => {
 
   useEffect(() => {
     resetStats();
+    clearKanaSelectorState();
     setActiveMilestone(null);
     // Track dojo and mode usage for achievements (Requirements 8.1-8.3)
     recordDojoUsed('kana');

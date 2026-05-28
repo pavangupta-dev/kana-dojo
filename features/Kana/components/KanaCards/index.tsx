@@ -1,11 +1,15 @@
 'use client';
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import Subset from './Subset';
 import KanaRowCard from './KanaRowCard';
 import KanaUnitSelector, { type KanaType } from './KanaUnitSelector';
 import { kana } from '@/features/Kana/data/kana';
 import { useClick } from '@/shared/hooks/generic/useAudio';
+import {
+  getKanaSelectorState,
+  saveKanaSelectorState,
+} from '@/shared/utils/selectorSessionStorage';
 import { cardBorderStyles } from '@/shared/utils/styles';
 import { ChevronUp } from 'lucide-react';
 
@@ -120,8 +124,22 @@ interface KanaCardsProps {
 
 const KanaCards = ({ filter = 'all', viewMode }: KanaCardsProps) => {
   const { playClick } = useClick();
-  const [filterOverride, setFilterOverride] = useState<KanaType>('hiragana');
-  const [selectedSubset, setSelectedSubset] = useState<string>('base');
+  const [filterOverride, setFilterOverride] = useState<KanaType>(() => {
+    if (filter !== 'all' || viewMode !== 'full') return 'hiragana';
+    return getKanaSelectorState()?.selected ?? 'hiragana';
+  });
+  const [selectedSubset, setSelectedSubset] = useState<string>(() => {
+    if (filter !== 'all' || viewMode !== 'full') return 'base';
+    return getKanaSelectorState()?.selectedSubset ?? 'base';
+  });
+
+  useEffect(() => {
+    if (filter !== 'all' || viewMode !== 'full') return;
+    saveKanaSelectorState({
+      selected: filterOverride,
+      selectedSubset,
+    });
+  }, [filter, filterOverride, selectedSubset, viewMode]);
 
   const effectiveFilter: KanaCardsFilter =
     USE_NEW_KANA_ROW_DESIGN && filter === 'all'

@@ -24,7 +24,7 @@ import {
   AccordionContent,
   AccordionItem,
 } from '@/shared/ui/components/accordion';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import SelectionStatusBar from '@/shared/ui-composite/Menu/SelectionStatusBar';
 import SubunitSelector from '@/shared/ui-composite/Menu/SubunitSelector';
 import {
@@ -32,6 +32,10 @@ import {
   buildUnitSummaries,
   shouldShowSubunitSelector,
 } from '@/shared/ui-composite/Menu/lib/unitSubunits';
+import {
+  getCollectionSelectorState,
+  saveCollectionSelectorState,
+} from '@/shared/utils/selectorSessionStorage';
 
 type CollectionLevel = 'n5' | 'n4' | 'n3' | 'n2' | 'n1';
 type ContentType = 'kanji' | 'vocabulary';
@@ -92,6 +96,9 @@ const UnitSelector = () => {
   const contentType = pathWithoutLocale.split('/')[1] as ContentType;
 
   const isKanji = contentType === 'kanji';
+  const storageContentType = isKanji ? 'kanji' : 'vocabulary';
+  const hasHydratedSelectorState = useRef(false);
+  const shouldSkipInitialSelectorSave = useRef(true);
 
   // Toggle between old (sliding indicator) and new (action buttons) design
   const useNewUnitSelectorDesign = false;
@@ -117,6 +124,67 @@ const UnitSelector = () => {
 
     return buildUnitSummaries(levels, level => sizes[level]);
   }, [isKanji]);
+
+  useEffect(() => {
+    if (hasHydratedSelectorState.current) return;
+    hasHydratedSelectorState.current = true;
+
+    const stored = getCollectionSelectorState(storageContentType);
+    const storedCollection = stored?.selectedCollection as
+      | CollectionLevel
+      | undefined;
+    if (
+      !storedCollection ||
+      !collections.some(collection => collection.name === storedCollection)
+    ) {
+      return;
+    }
+
+    const storedSubunitByUnit = stored?.selectedSubunitByUnit ?? {};
+    const storedSubunit = storedSubunitByUnit[storedCollection];
+
+    if (isKanji) {
+      setSelectedKanjiCollection(storedCollection);
+      if (storedSubunit) {
+        kanjiSelection.setSubunitForUnit(storedCollection, storedSubunit);
+      }
+      return;
+    }
+
+    setSelectedVocabCollection(storedCollection);
+    if (storedSubunit) {
+      vocabSelection.setSubunitForUnit(storedCollection, storedSubunit);
+    }
+  }, [
+    collections,
+    isKanji,
+    kanjiSelection,
+    setSelectedKanjiCollection,
+    setSelectedVocabCollection,
+    storageContentType,
+    vocabSelection,
+  ]);
+
+  useEffect(() => {
+    if (!hasHydratedSelectorState.current) return;
+    if (shouldSkipInitialSelectorSave.current) {
+      shouldSkipInitialSelectorSave.current = false;
+      return;
+    }
+
+    saveCollectionSelectorState(storageContentType, {
+      selectedCollection,
+      selectedSubunitByUnit: isKanji
+        ? kanjiSelection.selectedSubunitByUnit
+        : vocabSelection.selectedSubunitByUnit,
+    });
+  }, [
+    isKanji,
+    kanjiSelection.selectedSubunitByUnit,
+    selectedCollection,
+    storageContentType,
+    vocabSelection.selectedSubunitByUnit,
+  ]);
 
   const handleCollectionSelect = (level: CollectionLevel) => {
     playClick();

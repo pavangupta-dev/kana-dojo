@@ -13,6 +13,7 @@ import SessionSummaryScreen from '@/shared/ui-composite/Game/SessionSummaryScree
 import StreakMilestoneOverlay from '@/shared/ui-composite/Game/StreakMilestoneOverlay';
 import { useRouter } from '@/core/i18n/routing';
 import { finalizeSession, startSession } from '@/shared/utils/sessionHistory';
+import { clearCollectionSelectorState } from '@/shared/utils/selectorSessionStorage';
 import useClassicSessionStore from '@/shared/store/useClassicSessionStore';
 import {
   shouldShowStreakMilestoneOverlay,
@@ -49,6 +50,12 @@ const Game = () => {
 
   const gameMode = useVocabStore(state => state.selectedGameModeVocab);
   const selectedVocabObjs = useVocabStore(state => state.selectedVocabObjs);
+  const setSelectedVocabCollection = useVocabStore(
+    state => state.setSelectedVocabCollection,
+  );
+  const setSelectedVocabSubunitForUnit = useVocabStore(
+    state => state.setSelectedSubunitForUnit,
+  );
   const router = useRouter();
   const [view, setView] = useState<'playing' | 'summary'>('playing');
   const [activeMilestone, setActiveMilestone] = useState<number | null>(null);
@@ -67,6 +74,9 @@ const Game = () => {
 
   useEffect(() => {
     resetStats();
+    clearCollectionSelectorState('vocabulary');
+    setSelectedVocabCollection('n5');
+    setSelectedVocabSubunitForUnit('n5', '1-10');
     setActiveMilestone(null);
     // Track dojo and mode usage for achievements (Requirements 8.1-8.3)
     recordDojoUsed('vocabulary');
