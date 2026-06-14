@@ -70,17 +70,24 @@
     "character": "Various endings"
   },
   {
-  "japanese": "次はもっと強くなる",
-  "romaji": "Tsugi wa motto tsuyoku naru",
-  "english": "Next time, I'll be stronger.",
-  "game": "Pokemon series",
-  "character": "Rival characters"
-},
+    "japanese": "次はもっと強くなる",
+    "romaji": "Tsugi wa motto tsuyoku naru",
+    "english": "Next time, I'll be stronger.",
+    "game": "Pokemon series",
+    "character": "Rival characters"
+  },
   {
-  "japanese": "まだまだだね",
-  "romaji": "Mada mada da ne",
-  "english": "You still have lots more to work on.",
-  "game": "The Prince of Tennis: Sweat & Tears 2",
-  "character": "Ryoma Echizen"
-}
+    "japanese": "まだまだだね",
+    "romaji": "Mada mada da ne",
+    "english": "You still have lots more to work on.",
+    "game": "The Prince of Tennis: Sweat & Tears 2",
+    "character": "Ryoma Echizen"
+  },
+  {
+    "japanese": "未来を変えるんだ！",
+    "romaji": "Mirai o kaerun da!",
+    "english": "We're going to change the future!",
+    "game": "Steins;Gate: My Darling's Embrace",
+    "character": "Rintaro Okabe"
+  }
 ]
