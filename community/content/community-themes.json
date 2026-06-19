@@ -274,5 +274,11 @@
   "backgroundColor": "oklch(97.0% 0.006 240.0 / 1)",
   "mainColor": "oklch(40.0% 0.035 260.0 / 1)",
   "secondaryColor": "oklch(65.0% 0.120 220.0 / 1)"
+  },
+  {
+  "id": "harbor-lights",
+  "backgroundColor": "oklch(14.0% 0.045 250.0 / 1)",
+  "mainColor": "oklch(80.0% 0.140 210.0 / 1)",
+  "secondaryColor": "oklch(70.0% 0.120 310.0 / 1)"
   }
 ]
